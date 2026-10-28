@@ -3,7 +3,13 @@ WORKDIR /app
 COPY universal_proxy.py /app/
 EXPOSE 8766
 ENV PORT=8766
-ENV TARGET_HOST=api.groq.com
-ENV TARGET_SCHEME=https
-ENV FORCE_LANG=ru
+# Мульти-target: хосты, имена, схемы, языки и ключи (через запятую).
+# Имена таргетов используются для маршрутизации (заголовок X-Target или префикс пути).
+ENV TARGET_HOSTS="api.groq.com,api.openai.com"
+ENV TARGET_NAMES="groq,openai"
+ENV TARGET_SCHEMES="https,https"
+ENV FORCE_LANGS="ru,"
+ENV API_KEYS=""
+# ROUTE_KEY="1" — маршрутизация по API-ключу (ключи должны быть уникальны)
+ENV ROUTE_KEY="1"
 CMD ["python3", "-u", "universal_proxy.py"]
